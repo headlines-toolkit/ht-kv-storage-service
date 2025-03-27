@@ -1,21 +1,29 @@
-import 'package:ht_kv_storage_service/ht_kv_storage_service.dart';
+import 'package:ht_kv_storage_service/src/ht_kv_storage_service.dart';
 
-/// {@template storage_keys}
-/// Defines a collection of constant keys used for accessing values
+/// {@template storage_key}
+/// Defines enum members representing keys used for accessing values
 /// stored within the [HtKVStorageService].
 ///
-/// This class prevents the use of magic strings for keys, promoting
-/// type safety and reducing potential runtime errors.
+/// This enum prevents the use of magic strings for keys, promoting
+/// type safety and reducing potential runtime errors. Use the [stringValue]
+/// getter to access the underlying string representation for storage.
 /// {@endtemplate}
-class StorageKeys {
-  /// Private constructor to prevent instantiation.
-  const StorageKeys._();
-
+enum StorageKey {
   /// Key for storing the email address used during a passwordless sign-in
   /// process.
-  static const String pendingSignInEmail = 'pending_signin_email';
+  pendingSignInEmail,
 
   /// Key for storing a boolean flag indicating whether the user has completed
   /// the onboarding flow.
-  static const String hasSeenOnboarding = 'has_seen_onboarding';
+  hasSeenOnboarding;
+
+  /// Returns the snake_case string representation of the key for storage.
+  String get stringValue {
+    switch (this) {
+      case StorageKey.pendingSignInEmail:
+        return 'pending_signin_email';
+      case StorageKey.hasSeenOnboarding:
+        return 'has_seen_onboarding';
+    }
+  }
 }
