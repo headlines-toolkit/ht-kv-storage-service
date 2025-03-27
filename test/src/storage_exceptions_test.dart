@@ -157,8 +157,10 @@ void main() {
       });
 
       test('can be instantiated with custom message', () {
-        const exception =
-            StorageKeyNotFoundException(testKey, message: testMessage);
+        const exception = StorageKeyNotFoundException(
+          testKey,
+          message: testMessage,
+        );
         expect(exception.key, testKey);
         expect(exception.message, testMessage);
         expect(exception.cause, isNull);

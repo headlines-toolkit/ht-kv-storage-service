@@ -10,8 +10,11 @@ const testWriteException = StorageWriteException('testKey', 'testValue');
 const testReadException = StorageReadException('testKey');
 const testDeleteException = StorageDeleteException('testKey');
 const testClearException = StorageClearException();
-const testTypeMismatchException =
-    StorageTypeMismatchException('testKey', String, int);
+const testTypeMismatchException = StorageTypeMismatchException(
+  'testKey',
+  String,
+  int,
+);
 const testKeyNotFoundException = StorageKeyNotFoundException('testKey');
 
 void main() {
@@ -38,8 +41,9 @@ void main() {
           value: any(named: 'value'),
         ),
       ).thenAnswer((_) async {});
-      when(() => mockStorageService.readString(key: any(named: 'key')))
-          .thenAnswer((_) async => null);
+      when(
+        () => mockStorageService.readString(key: any(named: 'key')),
+      ).thenAnswer((_) async => null);
       when(
         () => mockStorageService.writeBool(
           key: any(named: 'key'),
@@ -53,29 +57,30 @@ void main() {
         ),
       ).thenAnswer((_) async => false); // Return default
       when(
-        () => mockStorageService.readBool(
-          key: any(named: 'key'),
-        ),
+        () => mockStorageService.readBool(key: any(named: 'key')),
       ) // Handle call without defaultValue
-          .thenAnswer((_) async => false);
+      .thenAnswer((_) async => false);
       when(
         () => mockStorageService.writeInt(
           key: any(named: 'key'),
           value: any(named: 'value'),
         ),
       ).thenAnswer((_) async {});
-      when(() => mockStorageService.readInt(key: any(named: 'key')))
-          .thenAnswer((_) async => null);
+      when(
+        () => mockStorageService.readInt(key: any(named: 'key')),
+      ).thenAnswer((_) async => null);
       when(
         () => mockStorageService.writeDouble(
           key: any(named: 'key'),
           value: any(named: 'value'),
         ),
       ).thenAnswer((_) async {});
-      when(() => mockStorageService.readDouble(key: any(named: 'key')))
-          .thenAnswer((_) async => null);
-      when(() => mockStorageService.delete(key: any(named: 'key')))
-          .thenAnswer((_) async {});
+      when(
+        () => mockStorageService.readDouble(key: any(named: 'key')),
+      ).thenAnswer((_) async => null);
+      when(
+        () => mockStorageService.delete(key: any(named: 'key')),
+      ).thenAnswer((_) async {});
       when(() => mockStorageService.clearAll()).thenAnswer((_) async {});
     });
 
@@ -83,10 +88,8 @@ void main() {
     test('writeString can be called', () async {
       await mockStorageService.writeString(key: 'testKey', value: 'testValue');
       verify(
-        () => mockStorageService.writeString(
-          key: 'testKey',
-          value: 'testValue',
-        ),
+        () =>
+            mockStorageService.writeString(key: 'testKey', value: 'testValue'),
       ).called(1);
     });
 
@@ -97,8 +100,9 @@ void main() {
 
     test('writeBool can be called', () async {
       await mockStorageService.writeBool(key: 'testKey', value: true);
-      verify(() => mockStorageService.writeBool(key: 'testKey', value: true))
-          .called(1);
+      verify(
+        () => mockStorageService.writeBool(key: 'testKey', value: true),
+      ).called(1);
     });
 
     test('readBool can be called with default', () async {
@@ -115,8 +119,9 @@ void main() {
 
     test('writeInt can be called', () async {
       await mockStorageService.writeInt(key: 'testKey', value: 123);
-      verify(() => mockStorageService.writeInt(key: 'testKey', value: 123))
-          .called(1);
+      verify(
+        () => mockStorageService.writeInt(key: 'testKey', value: 123),
+      ).called(1);
     });
 
     test('readInt can be called', () async {
@@ -126,8 +131,9 @@ void main() {
 
     test('writeDouble can be called', () async {
       await mockStorageService.writeDouble(key: 'testKey', value: 1.23);
-      verify(() => mockStorageService.writeDouble(key: 'testKey', value: 1.23))
-          .called(1);
+      verify(
+        () => mockStorageService.writeDouble(key: 'testKey', value: 1.23),
+      ).called(1);
     });
 
     test('readDouble can be called', () async {
@@ -163,8 +169,9 @@ void main() {
     });
 
     test('readString throws StorageReadException on failure', () async {
-      when(() => mockStorageService.readString(key: any(named: 'key')))
-          .thenThrow(testReadException);
+      when(
+        () => mockStorageService.readString(key: any(named: 'key')),
+      ).thenThrow(testReadException);
 
       expect(
         () => mockStorageService.readString(key: 'testKey'),
@@ -172,16 +179,19 @@ void main() {
       );
     });
 
-    test('readString throws StorageTypeMismatchException on type mismatch',
-        () async {
-      when(() => mockStorageService.readString(key: any(named: 'key')))
-          .thenThrow(testTypeMismatchException);
+    test(
+      'readString throws StorageTypeMismatchException on type mismatch',
+      () async {
+        when(
+          () => mockStorageService.readString(key: any(named: 'key')),
+        ).thenThrow(testTypeMismatchException);
 
-      expect(
-        () => mockStorageService.readString(key: 'testKey'),
-        throwsA(isA<StorageTypeMismatchException>()),
-      );
-    });
+        expect(
+          () => mockStorageService.readString(key: 'testKey'),
+          throwsA(isA<StorageTypeMismatchException>()),
+        );
+      },
+    );
 
     test('writeBool throws StorageWriteException on failure', () async {
       when(
@@ -198,8 +208,9 @@ void main() {
     });
 
     test('readBool throws StorageReadException on failure', () async {
-      when(() => mockStorageService.readBool(key: any(named: 'key')))
-          .thenThrow(testReadException);
+      when(
+        () => mockStorageService.readBool(key: any(named: 'key')),
+      ).thenThrow(testReadException);
 
       expect(
         () => mockStorageService.readBool(key: 'testKey'),
@@ -207,16 +218,19 @@ void main() {
       );
     });
 
-    test('readBool throws StorageTypeMismatchException on type mismatch',
-        () async {
-      when(() => mockStorageService.readBool(key: any(named: 'key')))
-          .thenThrow(testTypeMismatchException);
+    test(
+      'readBool throws StorageTypeMismatchException on type mismatch',
+      () async {
+        when(
+          () => mockStorageService.readBool(key: any(named: 'key')),
+        ).thenThrow(testTypeMismatchException);
 
-      expect(
-        () => mockStorageService.readBool(key: 'testKey'),
-        throwsA(isA<StorageTypeMismatchException>()),
-      );
-    });
+        expect(
+          () => mockStorageService.readBool(key: 'testKey'),
+          throwsA(isA<StorageTypeMismatchException>()),
+        );
+      },
+    );
 
     test('writeInt throws StorageWriteException on failure', () async {
       when(
@@ -233,8 +247,9 @@ void main() {
     });
 
     test('readInt throws StorageReadException on failure', () async {
-      when(() => mockStorageService.readInt(key: any(named: 'key')))
-          .thenThrow(testReadException);
+      when(
+        () => mockStorageService.readInt(key: any(named: 'key')),
+      ).thenThrow(testReadException);
 
       expect(
         () => mockStorageService.readInt(key: 'testKey'),
@@ -242,16 +257,19 @@ void main() {
       );
     });
 
-    test('readInt throws StorageTypeMismatchException on type mismatch',
-        () async {
-      when(() => mockStorageService.readInt(key: any(named: 'key')))
-          .thenThrow(testTypeMismatchException);
+    test(
+      'readInt throws StorageTypeMismatchException on type mismatch',
+      () async {
+        when(
+          () => mockStorageService.readInt(key: any(named: 'key')),
+        ).thenThrow(testTypeMismatchException);
 
-      expect(
-        () => mockStorageService.readInt(key: 'testKey'),
-        throwsA(isA<StorageTypeMismatchException>()),
-      );
-    });
+        expect(
+          () => mockStorageService.readInt(key: 'testKey'),
+          throwsA(isA<StorageTypeMismatchException>()),
+        );
+      },
+    );
 
     test('writeDouble throws StorageWriteException on failure', () async {
       when(
@@ -268,8 +286,9 @@ void main() {
     });
 
     test('readDouble throws StorageReadException on failure', () async {
-      when(() => mockStorageService.readDouble(key: any(named: 'key')))
-          .thenThrow(testReadException);
+      when(
+        () => mockStorageService.readDouble(key: any(named: 'key')),
+      ).thenThrow(testReadException);
 
       expect(
         () => mockStorageService.readDouble(key: 'testKey'),
@@ -277,20 +296,24 @@ void main() {
       );
     });
 
-    test('readDouble throws StorageTypeMismatchException on type mismatch',
-        () async {
-      when(() => mockStorageService.readDouble(key: any(named: 'key')))
-          .thenThrow(testTypeMismatchException);
+    test(
+      'readDouble throws StorageTypeMismatchException on type mismatch',
+      () async {
+        when(
+          () => mockStorageService.readDouble(key: any(named: 'key')),
+        ).thenThrow(testTypeMismatchException);
 
-      expect(
-        () => mockStorageService.readDouble(key: 'testKey'),
-        throwsA(isA<StorageTypeMismatchException>()),
-      );
-    });
+        expect(
+          () => mockStorageService.readDouble(key: 'testKey'),
+          throwsA(isA<StorageTypeMismatchException>()),
+        );
+      },
+    );
 
     test('delete throws StorageDeleteException on failure', () async {
-      when(() => mockStorageService.delete(key: any(named: 'key')))
-          .thenThrow(testDeleteException);
+      when(
+        () => mockStorageService.delete(key: any(named: 'key')),
+      ).thenThrow(testDeleteException);
 
       expect(
         () => mockStorageService.delete(key: 'testKey'),
@@ -300,8 +323,9 @@ void main() {
 
     test('delete might throw StorageKeyNotFoundException', () async {
       // Testing the possibility as per documentation comment
-      when(() => mockStorageService.delete(key: any(named: 'key')))
-          .thenThrow(testKeyNotFoundException);
+      when(
+        () => mockStorageService.delete(key: any(named: 'key')),
+      ).thenThrow(testKeyNotFoundException);
 
       expect(
         () => mockStorageService.delete(key: 'testKey'),
