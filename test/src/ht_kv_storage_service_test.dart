@@ -5,6 +5,15 @@ import 'package:test/test.dart';
 // Create a mock implementation of the abstract class
 class MockHtKVStorageService extends Mock implements HtKVStorageService {}
 
+// Define sample exceptions for testing purposes
+const testWriteException = StorageWriteException('testKey', 'testValue');
+const testReadException = StorageReadException('testKey');
+const testDeleteException = StorageDeleteException('testKey');
+const testClearException = StorageClearException();
+const testTypeMismatchException =
+    StorageTypeMismatchException('testKey', String, int);
+const testKeyNotFoundException = StorageKeyNotFoundException('testKey');
+
 void main() {
   group('HtKVStorageService Abstract Class', () {
     late MockHtKVStorageService mockStorageService;
@@ -134,6 +143,179 @@ void main() {
     test('clearAll can be called', () async {
       await mockStorageService.clearAll();
       verify(() => mockStorageService.clearAll()).called(1);
+    });
+
+    // --- Exception Tests ---
+
+    test('writeString throws StorageWriteException on failure', () async {
+      when(
+        () => mockStorageService.writeString(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+        ),
+      ).thenThrow(testWriteException);
+
+      expect(
+        () =>
+            mockStorageService.writeString(key: 'testKey', value: 'testValue'),
+        throwsA(isA<StorageWriteException>()),
+      );
+    });
+
+    test('readString throws StorageReadException on failure', () async {
+      when(() => mockStorageService.readString(key: any(named: 'key')))
+          .thenThrow(testReadException);
+
+      expect(
+        () => mockStorageService.readString(key: 'testKey'),
+        throwsA(isA<StorageReadException>()),
+      );
+    });
+
+    test('readString throws StorageTypeMismatchException on type mismatch',
+        () async {
+      when(() => mockStorageService.readString(key: any(named: 'key')))
+          .thenThrow(testTypeMismatchException);
+
+      expect(
+        () => mockStorageService.readString(key: 'testKey'),
+        throwsA(isA<StorageTypeMismatchException>()),
+      );
+    });
+
+    test('writeBool throws StorageWriteException on failure', () async {
+      when(
+        () => mockStorageService.writeBool(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+        ),
+      ).thenThrow(testWriteException);
+
+      expect(
+        () => mockStorageService.writeBool(key: 'testKey', value: true),
+        throwsA(isA<StorageWriteException>()),
+      );
+    });
+
+    test('readBool throws StorageReadException on failure', () async {
+      when(() => mockStorageService.readBool(key: any(named: 'key')))
+          .thenThrow(testReadException);
+
+      expect(
+        () => mockStorageService.readBool(key: 'testKey'),
+        throwsA(isA<StorageReadException>()),
+      );
+    });
+
+    test('readBool throws StorageTypeMismatchException on type mismatch',
+        () async {
+      when(() => mockStorageService.readBool(key: any(named: 'key')))
+          .thenThrow(testTypeMismatchException);
+
+      expect(
+        () => mockStorageService.readBool(key: 'testKey'),
+        throwsA(isA<StorageTypeMismatchException>()),
+      );
+    });
+
+    test('writeInt throws StorageWriteException on failure', () async {
+      when(
+        () => mockStorageService.writeInt(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+        ),
+      ).thenThrow(testWriteException);
+
+      expect(
+        () => mockStorageService.writeInt(key: 'testKey', value: 1),
+        throwsA(isA<StorageWriteException>()),
+      );
+    });
+
+    test('readInt throws StorageReadException on failure', () async {
+      when(() => mockStorageService.readInt(key: any(named: 'key')))
+          .thenThrow(testReadException);
+
+      expect(
+        () => mockStorageService.readInt(key: 'testKey'),
+        throwsA(isA<StorageReadException>()),
+      );
+    });
+
+    test('readInt throws StorageTypeMismatchException on type mismatch',
+        () async {
+      when(() => mockStorageService.readInt(key: any(named: 'key')))
+          .thenThrow(testTypeMismatchException);
+
+      expect(
+        () => mockStorageService.readInt(key: 'testKey'),
+        throwsA(isA<StorageTypeMismatchException>()),
+      );
+    });
+
+    test('writeDouble throws StorageWriteException on failure', () async {
+      when(
+        () => mockStorageService.writeDouble(
+          key: any(named: 'key'),
+          value: any(named: 'value'),
+        ),
+      ).thenThrow(testWriteException);
+
+      expect(
+        () => mockStorageService.writeDouble(key: 'testKey', value: 1),
+        throwsA(isA<StorageWriteException>()),
+      );
+    });
+
+    test('readDouble throws StorageReadException on failure', () async {
+      when(() => mockStorageService.readDouble(key: any(named: 'key')))
+          .thenThrow(testReadException);
+
+      expect(
+        () => mockStorageService.readDouble(key: 'testKey'),
+        throwsA(isA<StorageReadException>()),
+      );
+    });
+
+    test('readDouble throws StorageTypeMismatchException on type mismatch',
+        () async {
+      when(() => mockStorageService.readDouble(key: any(named: 'key')))
+          .thenThrow(testTypeMismatchException);
+
+      expect(
+        () => mockStorageService.readDouble(key: 'testKey'),
+        throwsA(isA<StorageTypeMismatchException>()),
+      );
+    });
+
+    test('delete throws StorageDeleteException on failure', () async {
+      when(() => mockStorageService.delete(key: any(named: 'key')))
+          .thenThrow(testDeleteException);
+
+      expect(
+        () => mockStorageService.delete(key: 'testKey'),
+        throwsA(isA<StorageDeleteException>()),
+      );
+    });
+
+    test('delete might throw StorageKeyNotFoundException', () async {
+      // Testing the possibility as per documentation comment
+      when(() => mockStorageService.delete(key: any(named: 'key')))
+          .thenThrow(testKeyNotFoundException);
+
+      expect(
+        () => mockStorageService.delete(key: 'testKey'),
+        throwsA(isA<StorageKeyNotFoundException>()),
+      );
+    });
+
+    test('clearAll throws StorageClearException on failure', () async {
+      when(() => mockStorageService.clearAll()).thenThrow(testClearException);
+
+      expect(
+        () => mockStorageService.clearAll(),
+        throwsA(isA<StorageClearException>()),
+      );
     });
   });
 }
