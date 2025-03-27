@@ -1,15 +1,30 @@
-// ignore_for_file: prefer_const_constructors
-import 'package:ht_kv_storage_service/src/storage_keys.dart';
+// ignore_for_file: lines_longer_than_80_chars
+
+import 'package:ht_kv_storage_service/ht_kv_storage_service.dart';
 import 'package:test/test.dart';
 
 void main() {
-  group('StorageKeys', () {
-    test('constants have correct values', () {
-      expect(StorageKeys.pendingSignInEmail, equals('pending_signin_email'));
-      expect(StorageKeys.hasSeenOnboarding, equals('has_seen_onboarding'));
+  group('StorageKey Enum', () {
+    test('stringValue getter returns correct values', () {
+      // Check the stringValue getter for each enum member
+      expect(
+        StorageKey.pendingSignInEmail.stringValue,
+        equals('pending_signin_email'),
+      );
+      expect(
+        StorageKey.hasSeenOnboarding.stringValue,
+        equals('has_seen_onboarding'),
+      );
     });
 
-    // Since the constructor is private, we cannot test instantiation directly,
-    // which is the intended behavior.
+    // Test that all enum values are covered in the stringValue getter's switch statement.
+    // This helps prevent forgetting to update the getter when adding new keys.
+    test('stringValue getter covers all enum values', () {
+      for (final key in StorageKey.values) {
+        // Expecting the getter not to throw an error is a basic check that
+        // the switch statement handles all cases.
+        expect(() => key.stringValue, returnsNormally);
+      }
+    });
   });
 }
