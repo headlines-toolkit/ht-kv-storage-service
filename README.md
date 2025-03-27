@@ -6,7 +6,8 @@ A Dart package defining an abstract interface (`HtKVStorageService`) for key-val
 
 *   Defines a clear contract for basic key-value operations (read, write, delete) for common data types (`String`, `bool`, `int`, `double`).
 *   Includes a `clearAll` method for removing all entries.
-*   Provides a `StorageKeys` class example to avoid magic strings.
+*   Provides a `StorageKey` enum to avoid magic strings, promoting type safety. Use the `stringValue` getter for the actual key string.
+*   Defines a set of custom `StorageException` subclasses (`StorageWriteException`, `StorageReadException`, `StorageDeleteException`, `StorageClearException`, `StorageKeyNotFoundException`, `StorageTypeMismatchException`) to handle specific storage errors.
 
 ## Getting Started 🚀
 
@@ -67,7 +68,7 @@ dependencies:
 
     ```dart
     import 'package:ht_kv_storage_service/ht_kv_storage_service.dart';
-    // Import your concrete implementation
+    // import 'package:your_package/your_storage_implementation.dart';
 
     Future<void> main() async {
       // Obtain an instance of your HtKVStorageService implementation
@@ -76,27 +77,38 @@ dependencies:
       // final storageService = HtKVStorageSharedPreferences(prefs);
 
       // Example usage:
-      // await storageService.writeBool(key: StorageKeys.hasSeenOnboarding, value: true);
-      // final hasSeenOnboarding = await storageService.readBool(key: StorageKeys.hasSeenOnboarding);
-      // print('Has seen onboarding: $hasSeenOnboarding');
+      try {
+        // Use the stringValue getter for the key
+        await storageService.writeBool(
+          key: StorageKey.hasSeenOnboarding.stringValue,
+          value: true,
+        );
+        final hasSeenOnboarding = await storageService.readBool(
+          key: StorageKey.hasSeenOnboarding.stringValue,
+        );
+        print('Has seen onboarding: $hasSeenOnboarding');
+      } on StorageWriteException catch (e) {
+        print('Failed to write: ${e.message}, Key: ${e.key}');
+      } on StorageReadException catch (e) {
+        print('Failed to read: ${e.message}, Key: ${e.key}');
+      } on StorageTypeMismatchException catch (e) {
+        print('Type mismatch: ${e.message}, Key: ${e.key}, Expected: ${e.expectedType}, Found: ${e.actualType}');
+      } catch (e) {
+        // Handle other potential exceptions
+        print('An unexpected error occurred: $e');
+      }
     }
     ```
 
-## Running Tests 🧪
+## Error Handling
 
-This package uses [Very Good Analysis](https://pub.dev/packages/very_good_analysis) for static analysis and aims for high test coverage.
+The `HtKVStorageService` methods may throw specific exceptions derived from `StorageException` upon failure:
 
-To run tests and generate coverage:
+*   `StorageWriteException`: Thrown by `write*` methods on failure.
+*   `StorageReadException`: Thrown by `read*` methods on general read failure.
+*   `StorageDeleteException`: Thrown by `delete` on failure.
+*   `StorageClearException`: Thrown by `clearAll` on failure.
+*   `StorageKeyNotFoundException`: May be thrown by `delete` if the key doesn't exist (implementation-dependent). `read*` methods typically return `null` or a default value instead.
+*   `StorageTypeMismatchException`: Thrown by `read*` methods if the stored data type doesn't match the expected type.
 
-```sh
-dart pub global activate coverage 1.2.0 # Activate coverage tool if needed
-dart test --coverage=coverage
-dart pub global run coverage:format_coverage --lcov --in=coverage --out=coverage/lcov.info
-```
-
-To view the HTML coverage report (requires `lcov` and `genhtml`):
-
-```sh
-genhtml coverage/lcov.info -o coverage/
-open coverage/index.html # On macOS/Linux
-# start coverage/index.html # On Windows
+Implementations should handle these exceptions appropriately (e.g., using `try-catch` blocks).
