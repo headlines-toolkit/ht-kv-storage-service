@@ -7,10 +7,7 @@ void main() {
   group('StorageKey Enum', () {
     test('stringValue getter returns correct values', () {
       // Check the stringValue getter for each enum member
-      expect(
-        StorageKey.authToken.stringValue,
-        equals('auth_token'),
-      );
+      expect(StorageKey.authToken.stringValue, equals('auth_token'));
       expect(
         StorageKey.hasSeenOnboarding.stringValue,
         equals('has_seen_onboarding'),
