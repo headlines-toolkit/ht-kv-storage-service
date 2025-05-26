@@ -8,8 +8,8 @@ void main() {
     test('stringValue getter returns correct values', () {
       // Check the stringValue getter for each enum member
       expect(
-        StorageKey.pendingSignInEmail.stringValue,
-        equals('pending_signin_email'),
+        StorageKey.authToken.stringValue,
+        equals('auth_token'),
       );
       expect(
         StorageKey.hasSeenOnboarding.stringValue,
