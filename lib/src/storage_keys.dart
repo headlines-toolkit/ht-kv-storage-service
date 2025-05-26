@@ -19,8 +19,8 @@ enum StorageKey {
   /// Returns the snake_case string representation of the key for storage.
   String get stringValue {
     switch (this) {
-      case StorageKey.pendingSignInEmail:
-        return 'pending_signin_email';
+      case StorageKey.authToken:
+        return 'auth_token';
       case StorageKey.hasSeenOnboarding:
         return 'has_seen_onboarding';
     }
