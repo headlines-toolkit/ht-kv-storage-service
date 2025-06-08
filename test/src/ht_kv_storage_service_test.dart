@@ -57,9 +57,9 @@ void main() {
         ),
       ).thenAnswer((_) async => false); // Return default
       when(
-        () => mockStorageService.readBool(key: any(named: 'key')),
-      ) // Handle call without defaultValue
-      .thenAnswer((_) async => false);
+            () => mockStorageService.readBool(key: any(named: 'key')),
+          ) // Handle call without defaultValue
+          .thenAnswer((_) async => false);
       when(
         () => mockStorageService.writeInt(
           key: any(named: 'key'),
