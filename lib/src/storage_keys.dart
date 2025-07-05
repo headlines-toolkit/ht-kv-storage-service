@@ -15,11 +15,7 @@ enum StorageKey {
 
   /// Key for storing a boolean flag indicating whether the user has completed
   /// the onboarding flow.
-  hasSeenOnboarding,
-  
-  /// Key for storing the email address of a user who is in the process of 
-  /// signing in, useful for pre-filling the email field.
-  pendingSignInEmail;
+  hasSeenOnboarding;
 
   /// Returns the snake_case string representation of the key for storage.
   String get stringValue {
@@ -28,8 +24,6 @@ enum StorageKey {
         return 'auth_token';
       case StorageKey.hasSeenOnboarding:
         return 'has_seen_onboarding';
-      case StorageKey.pendingSignInEmail:
-        return 'pending_sign_in_email';
     }
   }
 }
